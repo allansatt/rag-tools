@@ -7,6 +7,8 @@ requires-python = ">=3.11"
 dependencies = [
     "chroma>=0.2.0",
     "chromadb>=1.0.8",
+    "langchain-text-splitters>=0.3.8",
     "ollama>=0.4.8",
+    "pandoc>=2.4",
     "pymupdf4llm>=0.0.24",
 ]

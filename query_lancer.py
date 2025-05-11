@@ -13,11 +13,11 @@ def main():
     parser.add_argument("query", type=str, help="The query to process.")
     args = parser.parse_args()
 
-    query_text = args.query
+    query_text = args.query 
     embedding_model_name = "nomic-embed-text"
     llm_model_name = "llama3.2"
     collection_name = "lancer"
-    num_results = 20
+    num_results = 10
 
     # 1. Create embedding for the query
     try:
@@ -62,7 +62,7 @@ def main():
             context_str = "No relevant documents found in the knowledge base."
         else:
             print(f"Retrieved {len(retrieved_documents)} documents from ChromaDB.")
-            context_str = "\n\n---\n\n".join(retrieved_documents)
+            context_str = "\n---------\n".join(retrieved_documents)
 
     except Exception as e:
         print(f"Error querying ChromaDB: {e}")
@@ -70,17 +70,26 @@ def main():
         return
  
     # 3. Pass original query and context to LLM
-    prompt = f"""Use the following context to anwer questions about the Tabletop Role Playing Game "Lancer". Respond only with the contents of the rules.
+    prompt = f"""Use the following context to anwer questions about the Tabletop Role Playing Game "Lancer".
 
 Context from documents:
 ---
 {context_str}
----
+--
+User Query: {query_text}"""
 
-User Query: {query_text}
+    # 4. Write the query to a file named in the queries directory named "lancer_{timestamp}.txt"
+    # (timestamp is the current time in seconds since epoch)
+    import time
+    import os # Import the os module
+    timestamp = int(time.time())
+    queries_dir = './queries'
 
-Answer:"""
-
+    # Create the queries directory if it doesn't exist
+    os.makedirs(queries_dir, exist_ok=True)
+    query_filename = f"{queries_dir}/lancer_{timestamp}.txt"
+    with open(query_filename, 'w') as f:
+        f.write(prompt)
     try:
         print(f"Sending query and context to LLM model '{llm_model_name}'...")
         response = ollama.chat(
