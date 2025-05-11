@@ -1,0 +1,12 @@
+[project]
+name = "rpg-rag"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "chroma>=0.2.0",
+    "chromadb>=1.0.8",
+    "ollama>=0.4.8",
+    "pymupdf4llm>=0.0.24",
+]
